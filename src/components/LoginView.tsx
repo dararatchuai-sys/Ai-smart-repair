@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Wrench,
   Shield,
@@ -19,10 +19,16 @@ import { useApp } from '../context/AppContext';
 import { UserRole } from '../types';
 
 export const LoginView: React.FC = () => {
-  const { switchRole, loginWithUser, setActiveView, users } = useApp();
+  const { switchRole, loginWithUser, setActiveView, users, loginTargetRole, setLoginTargetRole } = useApp();
 
   // Role Tab: 'technician' or 'admin'
-  const [selectedRole, setSelectedRole] = useState<'technician' | 'admin'>('technician');
+  const [selectedRole, setSelectedRole] = useState<'technician' | 'admin'>(loginTargetRole || 'technician');
+
+  useEffect(() => {
+    if (loginTargetRole) {
+      setSelectedRole(loginTargetRole);
+    }
+  }, [loginTargetRole]);
 
   // Input states
   const [username, setUsername] = useState('');

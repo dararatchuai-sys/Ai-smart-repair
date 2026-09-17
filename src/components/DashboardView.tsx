@@ -15,7 +15,8 @@ import {
   ChevronRight,
   MapPin,
   Laptop,
-  Receipt
+  Receipt,
+  Shield
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { STATUS_CONFIG, URGENCY_CONFIG } from '../data/mockData';

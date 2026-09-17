@@ -10,7 +10,8 @@ import {
   RefreshCw,
   PlusCircle,
   Lock,
-  Search
+  Search,
+  Shield
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -31,7 +32,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar, isMobileS
     setSelectedTicketId,
     isSyncing,
     syncNow,
-    sseStatus
+    sseStatus,
+    openLogin
   } = useApp();
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -179,6 +181,43 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar, isMobileS
                 </div>
               )}
             </div>
+
+            {/* Staff Login Trigger (when in user mode) */}
+            {currentRole === 'user' && (
+              <div className="flex items-center gap-1.5 ml-1">
+                {/* Desktop Buttons */}
+                <button
+                  id="btn-nav-login-tech"
+                  onClick={() => openLogin('technician')}
+                  className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold shadow-2xs transition-all cursor-pointer"
+                  title="เข้าสู่ระบบช่างซ่อมคอมพิวเตอร์"
+                >
+                  <Wrench className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>เข้าสู่ระบบช่างซ่อม</span>
+                </button>
+
+                <button
+                  id="btn-nav-login-admin"
+                  onClick={() => openLogin('admin')}
+                  className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-indigo-300 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-semibold shadow-2xs transition-all cursor-pointer"
+                  title="เข้าสู่ระบบผู้ดูแลระบบ (Admin)"
+                >
+                  <Shield className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>เข้าสู่ระบบผู้ดูแลระบบ</span>
+                </button>
+
+                {/* Mobile / Tablet Compact Button */}
+                <button
+                  id="btn-nav-login-staff-compact"
+                  onClick={() => openLogin('technician')}
+                  className="md:hidden inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all cursor-pointer"
+                  title="เข้าสู่ระบบเจ้าหน้าที่ (ช่าง / แอดมิน)"
+                >
+                  <Lock className="w-3 h-3 text-amber-300" />
+                  <span>เข้าสู่ระบบ</span>
+                </button>
+              </div>
+            )}
 
             {/* User Profile Avatar / Logout - only shown for logged in staff (technician / admin) */}
             {currentRole !== 'user' && (

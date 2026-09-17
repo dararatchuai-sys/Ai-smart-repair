@@ -28,6 +28,9 @@ interface AppContextType {
   currentRole: UserRole;
   selectedTicketId: string | null;
   activeView: string;
+  loginTargetRole: 'technician' | 'admin';
+  setLoginTargetRole: (role: 'technician' | 'admin') => void;
+  openLogin: (role?: 'technician' | 'admin') => void;
   isLineModalOpen: boolean;
   isDbModalOpen: boolean;
   isGuideModalOpen: boolean;
@@ -213,6 +216,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [activeView, setActiveView] = useState<string>('dashboard');
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
+  const [loginTargetRole, setLoginTargetRole] = useState<'technician' | 'admin'>('technician');
+
+  const openLogin = useCallback((role: 'technician' | 'admin' = 'technician') => {
+    setLoginTargetRole(role);
+    setActiveView('login');
+  }, []);
 
   // Modals
   const [isLineModalOpen, setIsLineModalOpen] = useState(false);
@@ -1244,6 +1253,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         currentRole,
         selectedTicketId,
         activeView,
+        loginTargetRole,
+        setLoginTargetRole,
+        openLogin,
         isLineModalOpen,
         isDbModalOpen,
         isGuideModalOpen,

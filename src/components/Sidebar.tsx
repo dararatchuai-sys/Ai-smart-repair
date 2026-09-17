@@ -16,7 +16,9 @@ import {
   AlertCircle,
   Lock,
   LogOut,
-  Receipt
+  Receipt,
+  Shield,
+  ArrowRight
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -41,7 +43,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
     setActiveView,
     repairs,
     notifications,
-    messages
+    messages,
+    openLogin
   } = useApp();
 
   const unreadNotifs = notifications.filter((n) => !n.isRead).length;
@@ -152,6 +155,38 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
               </span>
             </div>
           </div>
+
+          {/* Quick Staff Login Trigger (when in user mode) */}
+          {currentRole === 'user' && (
+            <div className="mt-2.5 pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-1.5">
+              <button
+                type="button"
+                id="sidebar-quick-tech-login"
+                onClick={() => {
+                  openLogin('technician');
+                  onCloseMobile();
+                }}
+                className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-500/30 text-emerald-300 hover:text-white text-[11px] font-semibold transition-all cursor-pointer"
+                title="เข้าสู่ระบบช่างซ่อมคอมพิวเตอร์"
+              >
+                <Wrench className="w-3 h-3 text-emerald-400" />
+                <span>ช่างซ่อม</span>
+              </button>
+              <button
+                type="button"
+                id="sidebar-quick-admin-login"
+                onClick={() => {
+                  openLogin('admin');
+                  onCloseMobile();
+                }}
+                className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-indigo-950/60 hover:bg-indigo-900/80 border border-indigo-500/30 text-indigo-300 hover:text-white text-[11px] font-semibold transition-all cursor-pointer"
+                title="เข้าสู่ระบบผู้ดูแลระบบ (Admin)"
+              >
+                <Shield className="w-3 h-3 text-indigo-400" />
+                <span>ผู้ดูแลระบบ</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Navigation items */}
@@ -185,6 +220,65 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
             );
           })}
         </nav>
+
+        {/* Staff Login Buttons (shown when user is 'user') */}
+        {currentRole === 'user' && (
+          <div className="p-3 border-t border-slate-800 bg-slate-950/70 space-y-2">
+            <div className="px-1 text-[11px] font-bold text-slate-400 flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-slate-300">
+                <Lock className="w-3 h-3 text-amber-400" />
+                <span>เข้าสู่ระบบเจ้าหน้าที่</span>
+              </span>
+              <span className="text-[10px] text-slate-500 font-normal">สำหรับช่าง / แอดมิน</span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-2">
+              {/* ปุ่มเข้าสู่ระบบช่างซ่อม */}
+              <button
+                type="button"
+                id="sidebar-btn-login-tech"
+                onClick={() => {
+                  openLogin('technician');
+                  onCloseMobile();
+                }}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-[0.99] text-white text-xs font-semibold shadow-md shadow-emerald-950/40 border border-emerald-400/20 transition-all cursor-pointer group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/40 text-emerald-100 flex items-center justify-center shrink-0 border border-emerald-300/30">
+                    <Wrench className="w-4 h-4" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold leading-tight">เข้าสู่ระบบช่างซ่อม</p>
+                    <p className="text-[10px] text-emerald-200/80 font-normal">ระบบรับงานซ่อมคอมพิวเตอร์</p>
+                  </div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-emerald-200 group-hover:translate-x-0.5 transition-transform shrink-0" />
+              </button>
+
+              {/* ปุ่มเข้าสู่ระบบผู้ดูแลระบบ */}
+              <button
+                type="button"
+                id="sidebar-btn-login-admin"
+                onClick={() => {
+                  openLogin('admin');
+                  onCloseMobile();
+                }}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 active:scale-[0.99] text-white text-xs font-semibold shadow-md shadow-indigo-950/40 border border-indigo-400/20 transition-all cursor-pointer group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-500/40 text-indigo-100 flex items-center justify-center shrink-0 border border-indigo-300/30">
+                    <Shield className="w-4 h-4" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold leading-tight">เข้าสู่ระบบผู้ดูแลระบบ</p>
+                    <p className="text-[10px] text-indigo-200/80 font-normal">จัดการระบบและรายงาน IT</p>
+                  </div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-indigo-200 group-hover:translate-x-0.5 transition-transform shrink-0" />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Staff User Profile / Logout (shown only for technician / admin) */}
         {currentRole !== 'user' && (
