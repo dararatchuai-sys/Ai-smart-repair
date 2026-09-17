@@ -60,8 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
     { id: 'repair_history', label: 'ประวัติการซ่อม', icon: History },
     { id: 'my_equipment', label: 'อุปกรณ์ในระบบ', icon: Laptop },
     { id: 'chat', label: 'แชตคุยกับช่าง', icon: MessageSquare, badge: unreadMessages > 0 ? unreadMessages : undefined },
-    { id: 'notifications', label: 'การแจ้งเตือน', icon: Bell, badge: unreadNotifs > 0 ? unreadNotifs : undefined },
-    { id: 'profile', label: 'ข้อมูลผู้แจ้ง', icon: User }
+    { id: 'notifications', label: 'การแจ้งเตือน', icon: Bell, badge: unreadNotifs > 0 ? unreadNotifs : undefined }
   ];
 
   // Menu items for Technician (ช่างซ่อม)

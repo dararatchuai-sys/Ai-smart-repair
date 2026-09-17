@@ -26,6 +26,7 @@ const AppContent: React.FC = () => {
   const {
     activeView,
     setActiveView,
+    currentRole,
     setSelectedTicketId,
     newTicketAlert,
     dismissNewTicketAlert
@@ -103,6 +104,7 @@ const AppContent: React.FC = () => {
       case 'notifications':
         return <NotificationsView />;
       case 'profile':
+        if (currentRole === 'user') return <DashboardView />;
         return <ProfileView />;
       default:
         return <DashboardView />;

@@ -22,7 +22,6 @@ import {
   User,
   Phone,
   Building2,
-  Mail,
   ArrowLeft
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
@@ -68,14 +67,6 @@ export const NewRepairView: React.FC = () => {
       return currentUser.department;
     }
     return 'หน่วยงานทั่วไป';
-  });
-  const [reporterEmail, setReporterEmail] = useState(() => {
-    const saved = localStorage.getItem('repair_reporter_email');
-    if (saved) return saved;
-    if (currentUser?.email && currentUser.id !== 'usr-guest' && currentUser.id !== 'usr-1') {
-      return currentUser.email;
-    }
-    return '';
   });
 
   // Form State
@@ -302,7 +293,6 @@ export const NewRepairView: React.FC = () => {
         localStorage.setItem('repair_reporter_name', reporterName.trim());
         localStorage.setItem('repair_reporter_phone', reporterPhone.trim());
         localStorage.setItem('repair_reporter_dept', reporterDepartment.trim());
-        localStorage.setItem('repair_reporter_email', reporterEmail.trim());
       } catch {
         // ignore localStorage errors
       }
@@ -311,7 +301,7 @@ export const NewRepairView: React.FC = () => {
         userName: reporterName.trim(),
         userPhone: reporterPhone.trim(),
         userDepartment: reporterDepartment.trim() || 'ทั่วไป',
-        userEmail: reporterEmail.trim(),
+        userEmail: currentUser?.email || '',
         equipmentId: selectedEquipmentId,
         equipmentCode,
         equipmentName,
@@ -423,7 +413,7 @@ export const NewRepairView: React.FC = () => {
             </div>
 
             {/* แผนก / หน่วยงาน */}
-            <div>
+            <div className="sm:col-span-2">
               <label htmlFor="input-reporter-dept" className="block text-xs font-semibold text-slate-700 mb-1.5">
                 หน่วยงาน / แผนก / สาขาวิชา
               </label>
@@ -435,24 +425,6 @@ export const NewRepairView: React.FC = () => {
                   value={reporterDepartment}
                   onChange={(e) => setReporterDepartment(e.target.value)}
                   placeholder="เช่น สาขาวิทยาการคอมพิวเตอร์ หรือ สำนักงานคณบดี"
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-              </div>
-            </div>
-
-            {/* อีเมลติดต่อ */}
-            <div>
-              <label htmlFor="input-reporter-email" className="block text-xs font-semibold text-slate-700 mb-1.5">
-                อีเมลติดต่อ (ทางเลือก)
-              </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  id="input-reporter-email"
-                  type="email"
-                  value={reporterEmail}
-                  onChange={(e) => setReporterEmail(e.target.value)}
-                  placeholder="เช่น user@institution.ac.th"
                   className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
