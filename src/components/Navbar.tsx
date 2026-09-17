@@ -63,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar, isMobileS
               </div>
               <div>
                 <h1 className="font-bold text-slate-900 text-base sm:text-lg leading-tight tracking-tight flex items-center gap-1.5">
-                  <span>Ai Smart Repair</span>
+                  <span>Ai Smart Repair DBS</span>
                   <span className="px-1.5 py-0.5 rounded-md bg-blue-100 text-blue-700 text-[10px] font-bold border border-blue-200 uppercase tracking-wider">
                     AI
                   </span>

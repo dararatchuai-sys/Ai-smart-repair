@@ -152,7 +152,18 @@ const mergeSseNotification = (rawNotif: NotificationItem, prev: NotificationItem
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [users, setUsers] = useState<User[]>(INITIAL_USERS);
+  const [users, setUsers] = useState<User[]>(() => {
+    try {
+      const saved = localStorage.getItem('online_repair_users');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // ignore
+    }
+    return INITIAL_USERS;
+  });
 
   // Restore saved role or default to 'user'
   const [currentRole, setCurrentRole] = useState<UserRole>(() => {
@@ -675,6 +686,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [equipmentList]);
 
+  // Save users to localStorage on change
+  useEffect(() => {
+    try {
+      if (users && users.length > 0) {
+        localStorage.setItem('online_repair_users', JSON.stringify(users));
+      }
+    } catch {
+      // ignore
+    }
+  }, [users]);
+
   const switchRole = useCallback((role: UserRole) => {
     setCurrentRole(role);
     const targetUser =
@@ -742,6 +764,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       userEmail: repairData.userEmail || currentUser.email || '',
       userPhone: repairData.userPhone || currentUser.phone || '',
       userDepartment: repairData.userDepartment || currentUser.department || 'ทั่วไป',
+      userLineId: repairData.userLineId || currentUser.lineUserId || '',
       equipmentId: repairData.equipmentId || '',
       equipmentCode: repairData.equipmentCode || 'EQ-001',
       equipmentName: repairData.equipmentName || 'คอมพิวเตอร์',
@@ -1110,6 +1133,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setUsers((prev) =>
       prev.map((u) => (u.id === id ? { ...u, ...userData } : u))
     );
+
+    if (currentUser && currentUser.id === id) {
+      setCurrentUser((prev) => {
+        const updated = { ...prev, ...userData };
+        try {
+          localStorage.setItem('online_repair_current_user', JSON.stringify(updated));
+        } catch {
+          // ignore
+        }
+        return updated;
+      });
+    }
 
     try {
       await fetch(`/api/users/${id}`, {

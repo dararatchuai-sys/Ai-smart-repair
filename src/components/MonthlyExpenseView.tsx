@@ -1360,7 +1360,7 @@ export const MonthlyExpenseView: React.FC = () => {
                   ใบสรุปรายงานค่าใช้จ่ายในการซ่อมบำรุงอุปกรณ์คอมพิวเตอร์
                 </h2>
                 <p className="text-xs text-slate-600 mt-1">
-                  ศูนย์เทคโนโลยีสารสนเทศ • ระบบ Ai Smart Repair
+                  ศูนย์เทคโนโลยีสารสนเทศ • ระบบ Ai Smart Repair DBS
                 </p>
                 <div className="text-xs text-slate-500 mt-2 flex items-center justify-center gap-4">
                   <span>

@@ -13,6 +13,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-1',
     username: 'somchai',
+    password: 'password123',
     email: 'somchai@institution.ac.th',
     name: 'อ.สมชาย ใจดี',
     role: 'user',
@@ -26,6 +27,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-2',
     username: 'napha',
+    password: 'password123',
     email: 'napha@institution.ac.th',
     name: 'คุณนภา มณีวรรณ',
     role: 'user',
@@ -39,6 +41,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'tech-1',
     username: 'prasit_tech',
+    password: 'password123',
     email: 'prasit@support.institution.ac.th',
     name: 'ช่างประสิทธิ์ ซ่อมไว',
     role: 'technician',
@@ -52,6 +55,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'tech-2',
     username: 'anan_tech',
+    password: 'password123',
     email: 'anan@support.institution.ac.th',
     name: 'ช่างอนันต์ ฮาร์ดแวร์โปร',
     role: 'technician',
@@ -65,6 +69,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'adm-1',
     username: 'wichai_admin',
+    password: 'password123',
     email: 'wichai@admin.institution.ac.th',
     name: 'ผอ.วิชัย ผู้ดูแลระบบ IT',
     role: 'admin',

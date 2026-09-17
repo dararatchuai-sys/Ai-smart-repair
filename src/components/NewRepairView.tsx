@@ -22,6 +22,7 @@ import {
   User,
   Phone,
   Building2,
+  MessageSquare,
   ArrowLeft
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
@@ -68,6 +69,14 @@ export const NewRepairView: React.FC = () => {
     }
     return 'หน่วยงานทั่วไป';
   });
+  const [reporterLineId, setReporterLineId] = useState(() => {
+    const saved = localStorage.getItem('repair_reporter_line_id');
+    if (saved) return saved;
+    if (currentUser?.lineUserId && currentUser.id !== 'usr-guest' && currentUser.id !== 'usr-1') {
+      return currentUser.lineUserId;
+    }
+    return '';
+  });
 
   // Form State
   const [selectedEquipmentId, setSelectedEquipmentId] = useState(equipmentList[0]?.id || '');
@@ -76,7 +85,7 @@ export const NewRepairView: React.FC = () => {
   const [equipmentType, setEquipmentType] = useState(equipmentList[0]?.type || 'คอมพิวเตอร์ตั้งโต๊ะ (PC)');
   const [equipmentBrand, setEquipmentBrand] = useState(equipmentList[0]?.brand || '');
   const [equipmentModel, setEquipmentModel] = useState(equipmentList[0]?.model || '');
-  const [location, setLocation] = useState(equipmentList[0]?.location || 'อาคารวิทยาการคอมพิวเตอร์');
+  const [location, setLocation] = useState('ธุรกิจดิจิทัล');
   const [room, setRoom] = useState(equipmentList[0]?.room || 'ห้องแล็บ 301');
 
   // Quick Add Equipment Modal for Admin
@@ -293,6 +302,7 @@ export const NewRepairView: React.FC = () => {
         localStorage.setItem('repair_reporter_name', reporterName.trim());
         localStorage.setItem('repair_reporter_phone', reporterPhone.trim());
         localStorage.setItem('repair_reporter_dept', reporterDepartment.trim());
+        localStorage.setItem('repair_reporter_line_id', reporterLineId.trim());
       } catch {
         // ignore localStorage errors
       }
@@ -301,6 +311,7 @@ export const NewRepairView: React.FC = () => {
         userName: reporterName.trim(),
         userPhone: reporterPhone.trim(),
         userDepartment: reporterDepartment.trim() || 'ทั่วไป',
+        userLineId: reporterLineId.trim(),
         userEmail: currentUser?.email || '',
         equipmentId: selectedEquipmentId,
         equipmentCode,
@@ -413,7 +424,7 @@ export const NewRepairView: React.FC = () => {
             </div>
 
             {/* แผนก / หน่วยงาน */}
-            <div className="sm:col-span-2">
+            <div>
               <label htmlFor="input-reporter-dept" className="block text-xs font-semibold text-slate-700 mb-1.5">
                 หน่วยงาน / แผนก / สาขาวิชา
               </label>
@@ -429,6 +440,24 @@ export const NewRepairView: React.FC = () => {
                 />
               </div>
             </div>
+
+            {/* ไอดีไลน์ (LINE ID) */}
+            <div>
+              <label htmlFor="input-reporter-line-id" className="block text-xs font-semibold text-slate-700 mb-1.5">
+                ไอดีไลน์ (LINE ID)
+              </label>
+              <div className="relative">
+                <MessageSquare className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  id="input-reporter-line-id"
+                  type="text"
+                  value={reporterLineId}
+                  onChange={(e) => setReporterLineId(e.target.value)}
+                  placeholder="เช่น @lineid หรือ line_username"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -439,88 +468,56 @@ export const NewRepairView: React.FC = () => {
             2. ข้อมูลอุปกรณ์และสถานที่
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* เลือกอุปกรณ์ */}
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                เลือกอุปกรณ์ที่ลงทะเบียนในระบบ
-              </label>
-              <select
-                id="select-equipment"
-                value={selectedEquipmentId}
-                onChange={(e) => handleEquipmentChange(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-slate-900"
-              >
-                {equipmentList.map((eq) => (
-                  <option key={eq.id} value={eq.id}>
-                    {eq.name} ({eq.room})
-                  </option>
-                ))}
-              </select>
-            </div>
-
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* ชื่ออุปกรณ์ */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                ชื่ออุปกรณ์
+                ชื่ออุปกรณ์ <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
                 value={equipmentName}
                 onChange={(e) => setEquipmentName(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800"
+                placeholder="เช่น คอมพิวเตอร์ All-in-One, ปรินเตอร์ HP"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               />
             </div>
 
-            {/* ประเภทอุปกรณ์ */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                ประเภทอุปกรณ์
-              </label>
-              <select
-                value={equipmentType}
-                onChange={(e) => setEquipmentType(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="คอมพิวเตอร์ตั้งโต๊ะ (PC)">คอมพิวเตอร์ตั้งโต๊ะ (PC)</option>
-                <option value="โน้ตบุ๊ก (Notebook)">โน้ตบุ๊ก (Notebook)</option>
-                <option value="เครื่องพิมพ์ (Printer)">เครื่องพิมพ์ (Printer)</option>
-                <option value="โปรเจกเตอร์ (Projector)">โปรเจกเตอร์ (Projector)</option>
-                <option value="อุปกรณ์เครือข่าย (Network)">อุปกรณ์เครือข่าย (Network)</option>
-                <option value="เครื่องสำรองไฟ (UPS)">เครื่องสำรองไฟ (UPS)</option>
-                <option value="จอภาพ (Monitor)">จอภาพ (Monitor)</option>
-                <option value="อื่นๆ">อื่นๆ</option>
-              </select>
-            </div>
-
             {/* สถานที่ / อาคาร */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                สถานที่ / อาคาร
+              <label htmlFor="select-repair-location" className="block text-xs font-semibold text-slate-700 mb-1.5">
+                สถานที่ / อาคาร <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
-                <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
+                <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <select
+                  id="select-repair-location"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800"
+                  className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none cursor-pointer"
                   required
-                />
+                >
+                  <option value="ธุรกิจดิจิทัล">ธุรกิจดิจิทัล</option>
+                  <option value="ช่างไฟฟ้า">ช่างไฟฟ้า</option>
+                  <option value="ช่างกลโรงงาน">ช่างกลโรงงาน</option>
+                  <option value="ช่างยนต์">ช่างยนต์</option>
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">▼</div>
               </div>
             </div>
 
-            {/* ห้อง */}
+            {/* ห้อง / แผนก */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                ห้อง / แผนก
+                ห้อง / แผนก <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
                 value={room}
                 onChange={(e) => setRoom(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800"
+                placeholder="เช่น ห้องแล็บ 301 (ชั้น 3), แผนกบุคคล"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               />
             </div>
@@ -1000,7 +997,14 @@ export const NewRepairView: React.FC = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-slate-500">ผู้แจ้งซ่อม:</span>
-                <span className="font-semibold text-slate-800">{createdTicket.userName} ({createdTicket.userPhone})</span>
+                <span className="font-semibold text-slate-800">
+                  {createdTicket.userName} ({createdTicket.userPhone})
+                  {createdTicket.userLineId && (
+                    <span className="ml-1.5 text-emerald-600 font-medium text-[11px]">
+                      LINE: {createdTicket.userLineId}
+                    </span>
+                  )}
+                </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-slate-500">อุปกรณ์:</span>

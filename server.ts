@@ -201,6 +201,11 @@ async function startServer() {
       return res.status(401).json({ error: 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง หรือบัญชีถูกระงับ' });
     }
 
+    const expectedPassword = user.password || 'password123';
+    if (password && password !== expectedPassword) {
+      return res.status(401).json({ error: 'รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง' });
+    }
+
     // Return authenticated user profile (session token simulation)
     return res.json({
       success: true,
@@ -217,6 +222,7 @@ async function startServer() {
     const newUser: User = {
       id: `usr-${Date.now()}`,
       username: req.body.username || `user_${Date.now()}`,
+      password: req.body.password || 'password123',
       email: req.body.email || '',
       name: req.body.name || 'ผู้ใช้งานใหม่',
       role: req.body.role || 'user',

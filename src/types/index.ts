@@ -3,6 +3,7 @@ export type UserRole = 'user' | 'technician' | 'admin';
 export interface User {
   id: string;
   username: string;
+  password?: string;
   email: string;
   name: string;
   role: UserRole;
@@ -112,6 +113,7 @@ export interface RepairRequest {
   userEmail: string;
   userPhone: string;
   userDepartment: string;
+  userLineId?: string;
   equipmentId: string;
   equipmentCode: string;
   equipmentName: string;
