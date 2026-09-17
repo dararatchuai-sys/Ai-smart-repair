@@ -150,11 +150,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
                   ? 'ช่างซ่อมคอมพิวเตอร์'
                   : 'ผู้แจ้งซ่อมทั่วไป'}
               </span>
-              {currentRole === 'user' && (
-                <span className="text-[10px] text-emerald-400 block font-normal">
-                  ไม่ต้องเข้าสู่ระบบ
-                </span>
-              )}
             </div>
           </div>
         </div>
@@ -191,19 +186,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
           })}
         </nav>
 
-        {/* Staff Login / Account Switcher Footer */}
-        {currentRole === 'user' ? (
-          <div className="p-3 border-t border-slate-800 bg-slate-950/40">
-            <button
-              id="sidebar-btn-staff-login"
-              onClick={() => handleNavClick('login')}
-              className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-600 hover:to-indigo-600 text-white text-xs font-semibold shadow-md transition-all cursor-pointer"
-            >
-              <Lock className="w-3.5 h-3.5 text-amber-300" />
-              <span>เข้าสู่ระบบเจ้าหน้าที่ (ช่าง / แอดมิน)</span>
-            </button>
-          </div>
-        ) : (
+        {/* Staff User Profile / Logout (shown only for technician / admin) */}
+        {currentRole !== 'user' && (
           <div className="p-3 border-t border-slate-800 bg-slate-950/40">
             <div className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 mb-2">
               <img

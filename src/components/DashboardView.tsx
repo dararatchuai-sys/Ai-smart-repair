@@ -70,27 +70,6 @@ export const DashboardView: React.FC = () => {
 
   return (
     <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-200">
-      {/* อยู่ด้านบนมุมขวานอกแผงแจ้งซ่อมอุปกรณ์ (สำหรับผู้ใช้ทั่วไป) */}
-      {currentRole === 'user' && (
-        <div className="flex items-center justify-between flex-wrap gap-2 -mb-1">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              ผู้แจ้งซ่อมไม่ต้องล็อกอิน แจ้งซ่อมได้ทันที
-            </span>
-          </div>
-          <button
-            id="btn-dash-staff-login-outside"
-            onClick={() => setActiveView('login')}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-700 hover:text-blue-700 font-semibold text-xs border border-slate-200 shadow-xs hover:border-slate-300 transition-all cursor-pointer group"
-            title="เข้าสู่ระบบเฉพาะช่างซ่อมและผู้ดูแลระบบ"
-          >
-            <Lock className="w-3.5 h-3.5 text-amber-500 group-hover:scale-110 transition-transform" />
-            <span>เข้าสู่ระบบเจ้าหน้าที่ (ช่าง / แอดมิน)</span>
-          </button>
-        </div>
-      )}
-
       {/* Welcome Banner */}
       <div
         className={`rounded-3xl text-white p-6 sm:p-8 shadow-xl relative overflow-hidden ${
@@ -107,24 +86,21 @@ export const DashboardView: React.FC = () => {
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-medium text-blue-100 mb-2 border border-white/10">
-              {currentRole === 'technician' ? (
-                <>
-                  <Wrench className="w-3.5 h-3.5 text-emerald-300" />
-                  <span className="text-emerald-100">แดชบอร์ดช่างซ่อมคอมพิวเตอร์ (IT Support Portal)</span>
-                </>
-              ) : currentRole === 'admin' ? (
-                <>
-                  <TrendingUp className="w-3.5 h-3.5 text-indigo-300" />
-                  <span className="text-indigo-100">แดชบอร์ดผู้ดูแลระบบ IT (Admin Portal)</span>
-                </>
-              ) : (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  <span>ระบบแจ้งซ่อมคอมพิวเตอร์ออนไลน์ • ไม่ต้องเข้าสู่ระบบ</span>
-                </>
-              )}
-            </div>
+            {(currentRole === 'technician' || currentRole === 'admin') && (
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-medium text-blue-100 mb-2 border border-white/10">
+                {currentRole === 'technician' ? (
+                  <>
+                    <Wrench className="w-3.5 h-3.5 text-emerald-300" />
+                    <span className="text-emerald-100">แดชบอร์ดช่างซ่อมคอมพิวเตอร์ (IT Support Portal)</span>
+                  </>
+                ) : (
+                  <>
+                    <TrendingUp className="w-3.5 h-3.5 text-indigo-300" />
+                    <span className="text-indigo-100">แดชบอร์ดผู้ดูแลระบบ IT (Admin Portal)</span>
+                  </>
+                )}
+              </div>
+            )}
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
               {currentRole === 'user' ? 'แจ้งซ่อมอุปกรณ์คอมพิวเตอร์ออนไลน์' : `สวัสดี, ${currentUser.name}`}
             </h1>
